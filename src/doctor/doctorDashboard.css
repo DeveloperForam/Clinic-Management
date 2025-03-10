@@ -1,0 +1,87 @@
+/* Ensure the body and html take up the full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Doctor Dashboard Layout */
+.doctor-dashboard {
+    display: flex;
+    height: 100vh; /* Full viewport height */
+    flex-direction: column; /* Ensure content stacks vertically */
+}
+
+/* Sidebar or other fixed content - if any */
+.doctor-sidebar {
+    /* Ensure the sidebar takes up its own space */
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+    top: 0;
+    left: 0;
+    box-sizing: border-box; /* Include padding in width and height calculation */
+}
+
+/* Dashboard Content */
+.dashboard-content {
+    flex: 1; /* Take up the remaining space */
+    padding: 20px;
+    background-color: #f4f4f4;
+    overflow-y: auto; /* Allow scrolling if the content overflows */
+    margin-left: 250px; /* Prevent content overlap with sidebar */
+    box-sizing: border-box; /* Ensure padding doesn't affect height calculations */
+    height: 100vh; /* Ensure full height for content */
+    padding-top: 60px; /* Add padding at the top to avoid text being cut off */
+}
+
+/* Dashboard Title */
+.dashboard-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Dashboard Stats Container */
+.dashboard-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* Allow wrapping of stat cards on smaller screens */
+}
+
+/* Stat Card */
+.stat-card {
+    flex: 1;
+    min-width: 250px; /* Ensure cards don't become too small */
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.stat-card h3 {
+    margin-bottom: 10px;
+}
+
+/* Responsive Design: Adjustments for smaller screens */
+@media (max-width: 768px) {
+    .doctor-dashboard {
+        flex-direction: column;
+    }
+
+    .doctor-sidebar {
+        position: relative; /* Sidebar takes full width on small screens */
+        width: 100%;
+        height: auto;
+    }
+
+    .dashboard-content {
+        margin-left: 0; /* Remove left margin */
+        padding-left: 20px; /* Add some left padding for small screens */
+        padding-top: 20px; /* Adjust top padding to avoid cutting off content */
+    }
+}

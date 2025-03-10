@@ -1,0 +1,417 @@
+/* Contact Page Background */
+.contact-container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #ffffff; /* White Box */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+
+/* Contact Panels */
+.contact-panels {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.contact-panel {
+  flex: 1;
+  background: linear-gradient(45deg, #007BFF, #0056b3);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.contact-panel:hover {
+  transform: translateY(-5px);
+}
+
+/* Review Section */
+.review-section {
+  margin-top: 20px;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+/* Star Rating */
+.star-rating {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.star {
+  font-size: 1.5rem;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.star.active {
+  color: #FFD700;
+}
+
+/* Reviews List */
+.reviews-list {
+  background: #e6f2ff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.review-item {
+  background: #ffffff;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Social Media */
+.social-media {
+  margin-top: 20px;
+}
+
+.social-icon {
+  font-size: 1.5rem;
+  margin: 0 10px;
+  color: #007BFF;
+  transition: color 0.3s ease-in-out;
+}
+
+.social-icon:hover {
+  color: #0056b3;
+}
+
+/* Google Map */
+.map-container {
+  margin-top: 20px;
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  border-radius: 10px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contact-panels {
+    flex-direction: column;
+  }
+}
+
+/* Review Section */
+.review-section {
+  margin-top: 20px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* Review Title */
+.review-section h3 {
+  font-size: 1.5rem;
+  color: #007BFF;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Star Rating System */
+.star-rating {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.star {
+  font-size: 1.8rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out, transform 0.2s;
+}
+
+.star:hover, .star.active {
+  color: #FFD700; /* Gold color for selected stars */
+  transform: scale(1.1);
+}
+
+/* Review Text Box */
+.review-section textarea {
+  width: 100%;
+  max-width: 500px; /* Limits width on larger screens */
+  height: 100px; /* Proper height */
+  padding: 12px;
+  margin-top: 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  resize: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Submit Review Button */
+.review-section button {
+  background: linear-gradient(45deg, #007BFF, #0056b3);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  margin-top: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.review-section button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 5px 15px rgba(0, 123, 255, 0.4);
+}
+
+/* Show Reviews Button */
+.toggle-btn {
+  display: block;
+  margin: 15px auto;
+  padding: 12px 20px;
+  font-size: 1rem;
+  background: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.toggle-btn:hover {
+  background: #0056b3;
+}
+
+/* Reviews List */
+.reviews-list {
+  background: #e6f2ff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.review-item {
+  background: white;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .review-section, .reviews-list {
+    width: 90%;
+  }
+
+  .star {
+    font-size: 1.5rem;
+  }
+
+  .review-section textarea {
+    font-size: 0.9rem;
+    max-width: 90%;
+  }
+}
+
+/* General Home Page Styling */
+.home-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  text-align: center;
+  color: white;
+  background: #f4f8fb; /* Light Blue Background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Banner Section */
+.banner {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to right, #007BFF, #ffffff); /* Blue to White Gradient */
+}
+
+/* Image Slider */
+.image-slider {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.image-slider img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6; /* Soft blend with gradient */
+  transition: opacity 1s ease-in-out;
+}
+
+/* Fade Animation */
+.fade-in {
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+/* Overlay for Better Readability */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Banner Text */
+.banner-text {
+  text-align: center;
+  max-width: 600px;
+}
+
+.banner-text h1 {
+  font-size: 2.8rem;
+  font-weight: bold;
+  background: linear-gradient(to right, #ffffff, #cce5ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: slideIn 1s ease-in-out;
+}
+
+.banner-text p {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: #ffffff;
+  animation: fadeText 1.5s ease-in-out;
+}
+
+/* Call-to-Action Button */
+.cta-btn {
+  padding: 14px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  color: white;
+  background: linear-gradient(45deg, #007BFF, #0056b3);
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 5px 15px rgba(0, 123, 255, 0.4);
+}
+
+.cta-btn:hover {
+  background: linear-gradient(45deg, #0056b3, #007BFF);
+  transform: translateY(-3px);
+  box-shadow: 0px 8px 20px rgba(0, 123, 255, 0.6);
+}
+
+/* Pulsating Animation */
+.pulsate {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .banner-text h1 {
+    font-size: 2rem;
+  }
+
+  .banner-text p {
+    font-size: 1rem;
+  }
+
+  .cta-btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeText {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

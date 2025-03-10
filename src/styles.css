@@ -1,0 +1,78 @@
+/* Full Page Background */
+.auth-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('D:\MSCIT_SEM2\ReactJS\hospitalmanagementsystem\public\images\login.jpg') no-repeat center center/cover;
+  }
+  
+  /* Login/Register Form Box */
+  .form-container {
+    background: #00796b; /* Green background */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 350px;
+  }
+  
+  h2 {
+    margin-bottom: 15px;
+    color: white;
+  }
+  
+  /* Input Fields */
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* White Button with Green Text */
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: white; /* White button */
+    color: #28a745; /* Green text */
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  /* Button Hover Effect */
+  button:hover {
+    background-color: #3ddc84; /* Light green */
+    color: white;
+  }
+  
+  /* Links */
+  p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: white;
+  }
+  
+  span {
+    color: #f8f9fa;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  span:hover {
+    text-decoration: underline;
+  }
+  
+  /* Mobile Responsive */
+  @media (max-width: 600px) {
+    .form-container {
+      width: 90%;
+    }
+  }
+  

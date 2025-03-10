@@ -1,0 +1,45 @@
+.appointment-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.appointment-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-form select,
+.appointment-form input {
+  margin: 10px 0;
+  padding: 8px;
+}
+
+.message {
+  margin-top: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.message.success {
+  background-color: #4CAF50;
+  color: rgb(6, 5, 5);
+}
+
+.message.error {
+  background-color: #f44336;
+  color: black;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

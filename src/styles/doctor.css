@@ -1,0 +1,144 @@
+.doctor-details-container {
+    padding: 20px;
+  }
+  
+  .book-btn {
+    background: blue;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+  }
+  
+  .popup-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .confirm-btn {
+    background: green;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .close-btn {
+    background: red;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .doctor-details-container {
+    text-align: center;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .clinic-banner .clinic-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .doctor-info-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  
+  .doctor-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+  }
+  
+  .book-btn {
+    background-color: blue;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .book-btn:hover {
+    background-color: darkblue;
+  }
+  
+  .popup, .success-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .success-popup {
+    color: green;
+  }
+
+  .clinic-banner {
+  position: relative;
+  text-align: center;
+}
+
+.clinic-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.clinic-name {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.clinic-banner {
+  text-align: center;
+  padding: 50px;
+  background-color: #f0f8ff; /* Light blue background */
+  border-radius: 8px;
+  margin: 20px auto;
+  max-width: 600px; /* Adjust width */
+}
+
+.clinic-name {
+  font-size: 28px;
+  font-weight: bold;
+  color: #007bff; /* Blue text */
+  background: none; /* Remove unwanted background */
+  padding: 9px;
+  display: inline-block;
+}

@@ -1,0 +1,92 @@
+/* Overall background styling */
+.logo-page {
+  background-color: #00796b; /* Set the background color */
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden; /* Hide images if they overflow */
+}
+
+/* Logo container styling */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1; /* Ensure the logo is above the side images */
+}
+
+/* Styling for the logo image */
+.logo {
+  width: 250px; /* Set logo size to medium */
+  height: auto;
+  border-radius: 8px; /* Optional: Adds rounded corners to the logo */
+  animation: logoAnimation 4s infinite ease-in-out; /* Animation for logo */
+  transition: transform 0.3s ease; /* Smooth transition for scale */
+}
+
+/* Side images styling */
+.side-images {
+  position: absolute;
+  top: 50%; /* Position relative to the center of the logo container */
+  left: 50%; /* Position relative to the center of the logo container */
+  transform: translate(-50%, -50%); /* Center the images around the logo */
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allow clicking through side images */
+}
+
+.side-image {
+  position: absolute;
+  opacity: 0.9; /* Slight transparency */
+  animation: floatAround 6s infinite ease-in-out; /* Same animation for all images */
+  transition: transform 0.5s ease-in-out, scale 0.3s ease; /* Hover effect */
+  z-index: 0;
+  cursor: pointer; /* Allow hover effect */
+  /* width: 50%;
+  height: 50%; */
+}
+
+/* Hover effect for side images */
+.side-image:hover {
+  transform: scale(1.1); /* Slightly enlarge the image on hover */
+}
+.image-container img {
+  position: absolute;
+  width: 80px; /* Adjust size as needed */
+}
+/* Floating effect animation for side images */
+@keyframes floatAround {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-10px, -10px);
+  }
+  50% {
+    transform: translate(10px, -10px);
+  }
+  75% {
+    transform: translate(-10px, 10px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Logo animation */
+@keyframes logoAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1); /* Slightly scale up the logo */
+  }
+  100% {
+    transform: scale(1);
+  }
+  
+}

@@ -1,0 +1,26 @@
+.clinic-profile-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #e0f7ff; /* Sky Blue */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.profile-title {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #007acc;
+}
+
+.profile-box {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.profile-box p {
+    font-size: 16px;
+    margin: 8px 0;
+}
