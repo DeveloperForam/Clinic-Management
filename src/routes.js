@@ -8,6 +8,7 @@ import PatientRoutes from "./patient/PatientRoutes";
 import AdminLogin from "./admin/AdminLogin";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
+import ManageDoctor from "./admin/ManageDoctors";
 
 const AppRoutes = () => {
   return (
@@ -18,6 +19,7 @@ const AppRoutes = () => {
       <Route path="/admin/*" element={<AdminRoutes />} />
       
       {/* Clinic Routes */}
+      <Route path="/clinic/*" element={<ClinicRoutes />} />
       <Route path="/clinic/*" element={<ClinicRoutes />} />
       
       {/* Patient Routes */}

@@ -7,24 +7,30 @@ const AdminLogin = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (credentials.email === "admin@example.com" && credentials.password === "admin123") {
-      // ✅ Store admin authentication state
-      localStorage.setItem("isAdminAuthenticated", "true");
+    try {
+      const response = await fetch("http://localhost:5000/api/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: credentials.email,
+          password: credentials.password
+        })
+      });
 
-      // ✅ Store admin details in localStorage
-      const adminData = {
-        email: credentials.email,
-        password: credentials.password,  // Not recommended for real apps, but works for this test
-        role: "Admin"
-      };
-      localStorage.setItem("user", JSON.stringify(adminData));
+      const data = await response.json();
 
-      navigate("/admin/dashboard"); // Redirect to dashboard
-    } else {
-      setError("Invalid Credentials!");
+      if (response.ok) {
+        navigate("/admin/dashboard"); // Redirect to dashboard
+      } else {
+        setError(data.message || "Invalid Credentials!");
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.");
     }
   };
 

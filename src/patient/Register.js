@@ -12,6 +12,12 @@ const Register = () => {
   const handleRegister = (e) => {
     e.preventDefault();
 
+    // 🔹 Input validation: Ensure fields are not empty
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      setMessage("All fields are required.");
+      return;
+    }
+
     const users = JSON.parse(localStorage.getItem("users")) || [];
     const userExists = users.some((u) => u.email === email);
 
@@ -24,20 +30,51 @@ const Register = () => {
     localStorage.setItem("users", JSON.stringify([...users, newUser]));
 
     setMessage("Registration successful! Redirecting...");
-    setTimeout(() => navigate("/patient/login"), 1000);
+    
+    setTimeout(() => {
+      navigate("/patient/login");
+    }, 1000);
   };
 
   return (
     <div className="auth-container fade-in">
       <h2 className="auth-title">Register</h2>
       <form className="auth-form" onSubmit={handleRegister}>
-        <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} required />
-        <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input 
+          type="text" 
+          placeholder="Full Name" 
+          value={name} 
+          onChange={(e) => setName(e.target.value)} 
+          required 
+        />
+        <input 
+          type="email" 
+          placeholder="Email Address" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+          required 
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          value={password} 
+          onChange={(e) => setPassword(e.target.value)} 
+          required 
+        />
         <button type="submit" className="btn">Register</button>
       </form>
       {message && <p className="message">{message}</p>}
-      <p className="switch-auth">Already have an account? <span onClick={() => navigate("/patient/login")}>Login</span></p>
+      
+      {/* 🔹 Improved navigation to Login page */}
+      <p className="switch-auth">
+        Already have an account?{" "}
+        <span 
+          onClick={() => navigate("/patient/login")}
+          style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}
+        >
+          Login
+        </span>
+      </p>
     </div>
   );
 };
