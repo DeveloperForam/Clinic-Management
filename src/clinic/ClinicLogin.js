@@ -4,22 +4,36 @@ import "../styles/auth.css";
 
 const ClinicLogin = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [credentials, setCredentials] = useState({ reference_id: "", password: "" });
   const [message, setMessage] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (credentials.email === "clinic@example.com" && credentials.password === "clinic123") {
-      localStorage.setItem("clinicAuthenticated", "true");
-      setIsAuthenticated(true);
-      setMessage("Login successful! Redirecting...");
+    try {
+      const response = await fetch("http://localhost:5000/api/clinic/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          clinic_name: "CITI Clinic",
+          reference_id: credentials.reference_id,
+          password: credentials.password,
+        }),
+      });
 
-      setTimeout(() => {
+      const data = await response.json();
+      
+      if (response.ok) {
+        setIsAuthenticated(true);
+        setMessage("Login successful! Redirecting...");
         navigate("/clinic/dashboard");
-      }, 1500);
-    } else {
-      setMessage("Invalid credentials!");
+      } else {
+        setMessage(data.message || "Invalid credentials!");
+      }
+    } catch (error) {
+      setMessage("Error logging in. Please try again later.");
     }
   };
 
@@ -28,10 +42,10 @@ const ClinicLogin = ({ setIsAuthenticated }) => {
       <h2 className="auth-title">Clinic Login</h2>
       <form className="auth-form" onSubmit={handleLogin}>
         <input
-          type="email"
-          placeholder="Enter Email"
-          value={credentials.email}
-          onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+          type="text"
+          placeholder="Enter Reference ID"
+          value={credentials.reference_id}
+          onChange={(e) => setCredentials({ ...credentials, reference_id: e.target.value })}
           required
         />
         <input

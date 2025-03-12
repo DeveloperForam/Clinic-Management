@@ -61,4 +61,8 @@ const AdminLogin = () => {
   );
 };
 
+// email and password
+// admin@gmail.com
+// 123456
+
 export default AdminLogin;
