@@ -21,6 +21,7 @@ const Profile = () => {
       <h2 className="profile-title">Admin Profile</h2>
       {user ? (
         <div className="profile-card">
+          <p><strong>Admin</strong></p>
           <p><strong>Email:</strong> {user.email}</p>
           <p><strong>Role:</strong> {user.role}</p>
           <button className="btn" onClick={() => navigate(-1)}>Back</button>

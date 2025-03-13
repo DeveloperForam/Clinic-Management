@@ -4,7 +4,7 @@ import "../styles/auth.css";
 
 const ClinicLogin = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
-  const [credentials, setCredentials] = useState({ reference_id: "", password: "" });
+  const [credentials, setCredentials] = useState({ clinic_name: "", reference_id: "", password: "" });
   const [message, setMessage] = useState("");
 
   const handleLogin = async (e) => {
@@ -17,19 +17,26 @@ const ClinicLogin = ({ setIsAuthenticated }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          clinic_name: "CITI Clinic",
+          clinic_name: credentials.clinic_name,
           reference_id: credentials.reference_id,
           password: credentials.password,
         }),
       });
 
       const data = await response.json();
+      // const data = await response.json().catch(() => ({ message: "Invalid server response" }));
+
       
       if (response.ok) {
+        // localStorage.setItem("token", data.token); // Save token for authenticated requests
         setIsAuthenticated(true);
         setMessage("Login successful! Redirecting...");
-        navigate("/clinic/dashboard");
-      } else {
+    
+        setTimeout(() => {
+            navigate("/clinic/dashboard");
+        }, 1000); // 1-second delay before redirection
+    }
+     else {
         setMessage(data.message || "Invalid credentials!");
       }
     } catch (error) {
@@ -41,6 +48,13 @@ const ClinicLogin = ({ setIsAuthenticated }) => {
     <div className="auth-container fade-in">
       <h2 className="auth-title">Clinic Login</h2>
       <form className="auth-form" onSubmit={handleLogin}>
+        <input
+          type="text"
+          placeholder="Enter Clinic Name"
+          value={credentials.clinic_name}
+          onChange={(e) => setCredentials({ ...credentials, clinic_name: e.target.value })}
+          required
+        />
         <input
           type="text"
           placeholder="Enter Reference ID"

@@ -32,7 +32,7 @@ const ClinicRoutes = () => {
               <Route path="manage-appointments" element={<ManageAppointments />} />
               <Route path="manage-patients" element={<ManagePatients />} />
               <Route path="profile" element={<Clinicprofile />} /> 
-              <Route path="*" element={<Navigate to="/clinic/dashboard" replace />} />
+              <Route path="login" element={<Navigate to="/clinic/dashboard" replace />} />
             </>
           ) : (
             <Route path="*" element={<Navigate to="/clinic/login" replace />} />
