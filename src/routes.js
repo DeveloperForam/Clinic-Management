@@ -5,10 +5,8 @@ import LandingPage from "./pages/LandingPage";
 import AdminRoutes from "./admin/AdminRoutes";
 import ClinicRoutes from "./clinic/ClinicRoutes";
 import PatientRoutes from "./patient/PatientRoutes";
-import AdminLogin from "./admin/AdminLogin";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
-import ManageDoctor from "./admin/ManageDoctors";
 
 const AppRoutes = () => {
   return (

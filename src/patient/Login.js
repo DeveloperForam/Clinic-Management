@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/auth.css";
 
@@ -8,31 +8,59 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    const loggedInUser = JSON.parse(localStorage.getItem("user"));
-
-    // Redirect to patient home if already logged in
-    if (loggedInUser && loggedInUser.role === "Patient") {
-      navigate("/patient/home", { replace: true });
-    }
-  }, [navigate]);
-
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find((u) => u.email === email && u.password === password);
+    try {
+      const response = await fetch("http://localhost:5000/api/patients/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      const data = await response.json();
 
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-      setMessage("Login successful!");
+      if (response.ok) {
+        setMessage("Login successful!");
+        setTimeout(() => {
+          navigate("/patient/home", { replace: true });
+        }, 1000);
+      } else {
+        setMessage(data.message || "Invalid email or password.");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      setMessage("An error occurred. Please try again.");
+    }
+  };
 
-      setTimeout(() => {
-        navigate("/patient/home", { replace: true });
-        window.location.reload(); // Ensures the state is fully updated
-      }, 1000);
-    } else {
-      setMessage("Invalid email or password.");
+  const handleRegister = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/patients/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: "nikita",
+          birthdate: "2002-08-21",
+          mobileno: "1234567880",
+          address: "13 City Center, NYC",
+          email: "nikita@gmail.com",
+          gender: "Female",
+          age: 24,
+          status: "Active",
+          password: "123456",
+        }),
+      });
+
+      const data = await response.json();
+      setMessage(response.ok ? "Registration successful!" : data.message || "Registration failed.");
+    } catch (error) {
+      console.error("Error during registration:", error);
+      setMessage("An error occurred during registration.");
     }
   };
 
@@ -59,8 +87,11 @@ const Login = () => {
       {message && <p className="message">{message}</p>}
       <p className="switch-auth">
         Don't have an account?{" "}
-        <span onClick={() => navigate("/patient/register")}>Register</span>
+        <span onClick={handleRegister} style={{ cursor: "pointer", color: "blue" }}>
+          Register
+        </span>
       </p>
+      {/* <button className="btn" onClick={handleLogout}>Logout</button> */}
     </div>
   );
 };

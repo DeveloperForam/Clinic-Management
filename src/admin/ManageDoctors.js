@@ -24,6 +24,7 @@ const ManageDoctors = () => {
       const response = await axios.get("http://localhost:5000/api/doctor/clinic-wise", {
         headers: { "Content-Type": "application/json" },
       });
+      // alert(response.data);
       setDoctors(response.data);
     } catch (error) {
       console.error("Error fetching doctors:", error);
@@ -147,6 +148,7 @@ const ManageDoctors = () => {
             </tr>
           </thead>
           <tbody>
+            
             {doctors.map((doctor) => (
               <tr key={doctor.id}>
                 <td>{doctor.doctor_name}</td>

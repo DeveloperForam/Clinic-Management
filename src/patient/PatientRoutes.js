@@ -41,8 +41,8 @@ const PatientRoutes = () => {
         {!user ? (
           <>
             <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-            <Route path="*" element={<Navigate to="/patient/login" replace />} />
+            <Route path="patient/register" element={<Register />} />
+            <Route path="*" element={<Navigate to="/patient/register" replace />} />
           </>
         ) : (
           <>
