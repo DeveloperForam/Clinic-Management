@@ -1,95 +1,77 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../admin/Sidebar";
 import "./dashboard.css";
 
 const ManageDoctors = () => {
-  const [doctors, setDoctors] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingDoctorId, setEditingDoctorId] = useState(null);
+  const [doctors, setDoctors] = useState([]);
   const [doctorData, setDoctorData] = useState({
-    clinic_id: 3, // This field is preset as per your API call; adjust as needed
+    clinic_id: 3,
     doctor_name: "",
     email: "",
     mobile_no: "",
     specialization: "",
     experience: "",
     gender: "Male",
-    // schedule: [{ day: "", start_time: "", end_time: "" }],
+    schedule: []
   });
-
-  // Fetch Doctors
-  const fetchDoctors = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/api/doctor/clinic-wise", {
-        headers: { "Content-Type": "application/json" },
-      });
-      // alert(response.data);
-      setDoctors(response.data);
-    } catch (error) {
-      console.error("Error fetching doctors:", error);
-    }
-  };
 
   useEffect(() => {
     fetchDoctors();
   }, []);
 
-  // Handle input changes for non-schedule fields
+  const fetchDoctors = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/doctor/clinic-wise");
+      const data = await response.json();
+      console.log("Fetched Data:", data);
+  
+      // Flatten the nested structure
+      const doctorList = data.flatMap(clinic => clinic.doctors || []);
+      
+      setDoctors(doctorList);
+    } catch (error) {
+      console.error("Error fetching doctors:", error);
+    }
+  };
+
+  const handleDelete = async (doctorId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/doctor/delete/${doctorId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Failed to delete doctor");
+      fetchDoctors();
+    } catch (error) {
+      console.error("Error deleting doctor:", error);
+    }
+  };
+  
+
   const handleChange = (e) => {
     setDoctorData({ ...doctorData, [e.target.name]: e.target.value });
   };
 
-  // Handle schedule changes
-  const handleScheduleChange = (index, field, value) => {
-    const updatedSchedule = [...doctorData.schedule];
-    updatedSchedule[index][field] = value;
-    setDoctorData({ ...doctorData, schedule: updatedSchedule });
-  };
+  const handleSubmit = async () => {
+    const url = editingDoctorId 
+      ? `http://localhost:5000/api/doctor/update/${editingDoctorId}`
+      : "http://localhost:5000/api/doctor/add";
+    const method = editingDoctorId ? "PUT" : "POST";
 
-  // Add Doctor
-  const addDoctor = async (e) => {
-    e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/doctor/add", doctorData, {
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(doctorData),
       });
-      setShowForm(false);
+      if (!response.ok) throw new Error("Failed to save doctor");
       fetchDoctors();
-    } catch (error) {
-      console.error("Error adding doctor:", error);
-    }
-  };
-
-  // Update Doctor
-  const updateDoctor = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.put(`http://localhost:5000/api/doctor/update/${editingDoctorId}`, doctorData, {
-        headers: { "Content-Type": "application/json" },
-      });
       setShowForm(false);
-      setEditingDoctorId(null);
-      fetchDoctors();
     } catch (error) {
-      console.error("Error updating doctor:", error);
+      console.error("Error saving doctor:", error);
     }
   };
-
-  // Delete Doctor
-  const deleteDoctor = async (doctorId) => {
-    if (window.confirm("Are you sure you want to delete this doctor?")) {
-      try {
-        await axios.delete(`http://localhost:5000/api/doctor/delete/${doctorId}`, {
-          headers: { "Content-Type": "application/json" },
-        });
-        fetchDoctors();
-      } catch (error) {
-        console.error("Error deleting doctor:", error);
-      }
-    }
-  };
-  
 
   return (
     <div className="dashboard">
@@ -128,57 +110,37 @@ const ManageDoctors = () => {
             <input type="text" name="experience" placeholder="Experience" value={doctorData.experience} onChange={handleChange} />
             <input type="text" name="qualification" placeholder="Qualification" value={doctorData.qualification} onChange={handleChange} />
 
-            
-            <button className="btn add" onClick={addDoctor}>Submit</button>
+            <button className="btn add" onClick={handleSubmit}>Submit</button>
             <button className="btn cancel" onClick={() => setShowForm(false)}>Cancel</button>
           </div>
         )}
 
-
         <table className="data-table">
           <thead>
             <tr>
-              <th>doctor_name</th>
-              {/* <th>specialization</th> */}
-              <th>gender</th>
-              {/* <th>experience</th> */}
-              <th>mobile_no</th>
-              {/* <th>email</th> */}
+              <th>Doctor Name</th>
+              <th>Gender</th>
+              <th>Email</th>
+              <th>Mobile No.</th>
+              <th>Specialization</th>
+              <th>Experience</th>
+              <th>Qualification</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            
             {doctors.map((doctor) => (
               <tr key={doctor.id}>
                 <td>{doctor.doctor_name}</td>
-                {/* <td>{doctor.specialization}</td> */}
                 <td>{doctor.gender}</td>
-                {/* <td>{doctor.experience}</td> */}
+                <td>{doctor.email}</td>
                 <td>{doctor.mobile_no}</td>
-                {/* <td>{doctor.email}</td> */}
+                <td>{doctor.specialization}</td>
+                <td>{doctor.experience}</td>
+                <td>{doctor.qualification}</td>
                 <td>
-                  <button
-                    className="btn edit"
-                    onClick={() => {
-                      setEditingDoctorId(doctor.id);
-                      setDoctorData({
-                        clinic_id: doctor.clinic_id || 3,
-                        doctor_name: doctor.doctor_name,
-                        email: doctor.email,
-                        mobile_no: doctor.mobile_no,
-                        specialization: doctor.specialization,
-                        experience: doctor.experience,
-                        gender: doctor.gender,
-                      });
-                      setShowForm(true);
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button className="btn delete" onClick={() => deleteDoctor(doctor.id)}>
-                    Delete
-                  </button>
+                  <button className="btn edit" onClick={() => { setShowForm(true); setEditingDoctorId(doctor.id); setDoctorData(doctor); }}>Edit</button>
+                  <button className="btn delete" onClick={() => handleDelete(doctor.id)}>Delete</button>                
                 </td>
               </tr>
             ))}
