@@ -27,18 +27,33 @@ const ClinicLogin = ({ setIsAuthenticated }) => {
       // const data = await response.json().catch(() => ({ message: "Invalid server response" }));
 
       
-      if (response.ok) {
-        // localStorage.setItem("token", data.token); // Save token for authenticated requests
-        setIsAuthenticated(true);
-        setMessage("Login successful! Redirecting...");
-    
-        setTimeout(() => {
-            navigate("/clinic/dashboard");
-        }, 1000); // 1-second delay before redirection
+    //   if (response.message) {
+    //     localStorage.setItem("token", data.token); // Save token for authenticated requests
+    //     setMessage("Login successful! Redirecting...");
+    //     navigate("/clinic/dashboard");
+    // }
+    // if (data.token) {
+    //   localStorage.setItem("token", data.token); // Save token for authenticated requests
+    //   setMessage("Login successful! Redirecting...");
+    //   navigate("/clinic/dashboard");
+    // }
+
+    if (data.token) {
+      localStorage.setItem("token", data.token); // Store token
+      localStorage.setItem("clinicAuthenticated", "true"); // Store auth status
+      setIsAuthenticated(true); // Update state
+      setMessage("Login successful! Redirecting...");
+      navigate("/clinic/dashboard");
     }
      else {
-        setMessage(data.message || "Invalid credentials!");
-      }
+      setMessage(data.message || "Invalid credentials!");
+    }
+    
+    
+    //  else {
+    //     setMessage(data.message || "Invalid credentials!");
+    //   }
+
     } catch (error) {
       setMessage("Error logging in. Please try again later.");
     }

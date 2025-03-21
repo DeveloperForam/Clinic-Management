@@ -10,7 +10,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch("http://localhost:5000/api/patients/login", {
         method: "POST",
@@ -19,13 +19,13 @@ const Login = () => {
         },
         body: JSON.stringify({ email, password }),
       });
-      
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         setMessage("Login successful!");
         setTimeout(() => {
-          navigate("/patient/home", { replace: true });
+          navigate("/dashboard", { replace: true }); // Redirect to dashboard
         }, 1000);
       } else {
         setMessage(data.message || "Invalid email or password.");
@@ -35,6 +35,7 @@ const Login = () => {
       setMessage("An error occurred. Please try again.");
     }
   };
+  
 
   const handleRegister = async () => {
     try {

@@ -58,20 +58,35 @@ const ManageDoctors = () => {
       ? `http://localhost:5000/api/doctor/update/${editingDoctorId}`
       : "http://localhost:5000/api/doctor/add";
     const method = editingDoctorId ? "PUT" : "POST";
-
+  
     try {
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(doctorData),
       });
+  
       if (!response.ok) throw new Error("Failed to save doctor");
-      fetchDoctors();
+  
+      // Clear the form data
+      setDoctorData({
+        clinic_id: 3,
+        doctor_name: "",
+        email: "",
+        mobile_no: "",
+        specialization: "",
+        experience: "",
+        gender: "Male",
+        schedule: [],
+      });
+  
       setShowForm(false);
+      fetchDoctors(); // Fetch updated list immediately
     } catch (error) {
       console.error("Error saving doctor:", error);
     }
   };
+  
 
   return (
     <div className="dashboard">
@@ -124,7 +139,6 @@ const ManageDoctors = () => {
               <th>Mobile No.</th>
               <th>Specialization</th>
               <th>Experience</th>
-              <th>Qualification</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -137,7 +151,6 @@ const ManageDoctors = () => {
                 <td>{doctor.mobile_no}</td>
                 <td>{doctor.specialization}</td>
                 <td>{doctor.experience}</td>
-                <td>{doctor.qualification}</td>
                 <td>
                   <button className="btn edit" onClick={() => { setShowForm(true); setEditingDoctorId(doctor.id); setDoctorData(doctor); }}>Edit</button>
                   <button className="btn delete" onClick={() => handleDelete(doctor.id)}>Delete</button>                

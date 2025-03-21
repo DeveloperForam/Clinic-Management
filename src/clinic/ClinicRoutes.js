@@ -27,12 +27,12 @@ const ClinicRoutes = () => {
           <Route path="login" element={<ClinicLogin setIsAuthenticated={setIsAuthenticated} />} />
           {isAuthenticated ? (
             <>
+            <Route path="login" element={<Navigate to="/clinic/dashboard" replace />} />
               <Route path="dashboard" element={<ClinicDashboard />} />
               <Route path="manage-schedule" element={<ManageSchedule />} />
               <Route path="manage-appointments" element={<ManageAppointments />} />
               <Route path="manage-patients" element={<ManagePatients />} />
               <Route path="profile" element={<Clinicprofile />} /> 
-              <Route path="login" element={<Navigate to="/clinic/dashboard" replace />} />
             </>
           ) : (
             <Route path="*" element={<Navigate to="/clinic/login" replace />} />
