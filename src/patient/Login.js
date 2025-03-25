@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/auth.css";
 
 const Login = () => {
@@ -8,60 +9,35 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+    const loggedInUser = JSON.parse(localStorage.getItem("user"));
+
+    if (loggedInUser && loggedInUser.role === "Patient") {
+      navigate("/patient/home", { replace: true });
+    }
+  }, [navigate]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+    setMessage("");
+
     try {
-      const response = await fetch("http://localhost:5000/api/patients/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      const response = await axios.post("http://localhost:5000/api/patients/login", {
+        email,
+        password,
       });
-  
-      const data = await response.json();
-  
-      if (response.ok) {
+
+      if (response.data) {
+        localStorage.setItem("user", JSON.stringify(response.data));
         setMessage("Login successful!");
+        
         setTimeout(() => {
-          navigate("/dashboard", { replace: true }); // Redirect to dashboard
+          navigate("/patient/home", { replace: true });
+          window.location.reload();
         }, 1000);
-      } else {
-        setMessage(data.message || "Invalid email or password.");
       }
     } catch (error) {
-      console.error("Error during login:", error);
-      setMessage("An error occurred. Please try again.");
-    }
-  };
-  
-
-  const handleRegister = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/patients/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "nikita",
-          birthdate: "2002-08-21",
-          mobileno: "1234567880",
-          address: "13 City Center, NYC",
-          email: "nikita@gmail.com",
-          gender: "Female",
-          age: 24,
-          status: "Active",
-          password: "123456",
-        }),
-      });
-
-      const data = await response.json();
-      setMessage(response.ok ? "Registration successful!" : data.message || "Registration failed.");
-    } catch (error) {
-      console.error("Error during registration:", error);
-      setMessage("An error occurred during registration.");
+      setMessage(error.response?.data?.message || "Invalid email or password.");
     }
   };
 
@@ -87,12 +63,9 @@ const Login = () => {
       </form>
       {message && <p className="message">{message}</p>}
       <p className="switch-auth">
-        Don't have an account?{" "}
-        <span onClick={handleRegister} style={{ cursor: "pointer", color: "blue" }}>
-          Register
-        </span>
+        Don't have an account? {" "}
+        <span onClick={() => navigate("/patient/register")}>Register</span>
       </p>
-      {/* <button className="btn" onClick={handleLogout}>Logout</button> */}
     </div>
   );
 };
