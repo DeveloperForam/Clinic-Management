@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "../styles/doctor.css"; 
-import "../styles/appointment.css"; 
-
-// Sample doctor data
-const doctors = {
-  1: { id: 1, name: "Dr. John Doe", specialty: "Cardiologist", startTime: "10:00", endTime: "21:00", slotDuration: 15, image: "/images/doctor1.jpg" },
-  2: { id: 2, name: "Dr. Sarah Smith", specialty: "Pediatrician", startTime: "10:00", endTime: "20:00", slotDuration: 20, image: "/images/doctor2.jpg" },
-  3: { id: 3, name: "Dr. Jane Brown", specialty: "Dermatologist", startTime: "09:00", endTime: "17:00", slotDuration: 15, image: "/images/doctor3.jpg" },
-  4: { id: 4, name: "Dr. Mark Wilson", specialty: "Neurologist", startTime: "08:00", endTime: "20:00", slotDuration: 15, image: "/images/doctor4.jpg" },
-};
+import "../styles/doctor.css";
+import "../styles/appointment.css";
 
 const DoctorDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const doctor = doctors[Number(id)]; // Convert id to a number
-
+  const [doctor, setDoctor] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [date, setDate] = useState("");
@@ -25,22 +16,36 @@ const DoctorDetails = () => {
 
   const today = new Date().toISOString().split("T")[0];
 
-  // Generate available slots
   useEffect(() => {
-    if (!doctor) return;
+    fetch(`http://localhost:5000/api/doctor/list/:clinic_id`, { // Use doctor ID from params
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setDoctor(data);
+        generateSlots(data);
+      })
+      .catch((error) => console.error("Error fetching doctor details:", error));
+  }, [id]);
+  
+
+  const generateSlots = (doctorData) => {
+    if (!doctorData) return;
 
     let slots = [];
-    let start = new Date(`2023-01-01T${doctor.startTime}`);
-    let end = new Date(`2023-01-01T${doctor.endTime}`);
+    let start = new Date(`2023-01-01T${doctorData.start_time}`);
+    let end = new Date(`2023-01-01T${doctorData.end_time}`);
 
     while (start < end) {
       slots.push(start.toTimeString().substring(0, 5));
-      start.setMinutes(start.getMinutes() + doctor.slotDuration);
+      start.setMinutes(start.getMinutes() + doctorData.slot_duration);
     }
     setAvailableSlots(slots);
-  }, [doctor]);
+  };
 
-  // Handle appointment booking
   const handleBooking = (e) => {
     e.preventDefault();
 
@@ -82,17 +87,22 @@ const DoctorDetails = () => {
       {doctor ? (
         <>
           <div className="clinic-banner">
-                <h1 className="clinic-name">City Health Clinic</h1> 
+            <h1 className="clinic-name">{doctor.clinic_name}</h1>
           </div>
 
-
           <div className="doctor-info-panel">
-            <img src={doctor.image} alt={doctor.name} className="doctor-image" />
+            <img src={doctor.image || "/images/default-doctor.jpg"} alt={doctor.name} className="doctor-image" />
 
             <div className="doctor-text">
               <h2>{doctor.name}</h2>
-              <p><strong>Specialty:</strong> {doctor.specialty}</p>
-              <p><strong>Available:</strong> {doctor.startTime} - {doctor.endTime}</p>
+              <p><strong>Specialty:</strong> {doctor.specialization}</p>
+              <p><strong>Experience:</strong> {doctor.experience} years</p>
+              <p><strong>Gender:</strong> {doctor.gender}</p>
+              <p><strong>Date of Birth:</strong> {doctor.dob}</p>
+              <p><strong>Contact:</strong> {doctor.mobile_no}</p>
+              <p><strong>Email:</strong> {doctor.email}</p>
+              <p><strong>Address:</strong> {doctor.address}</p>
+              <p><strong>Available:</strong> {doctor.start_time} - {doctor.end_time}</p>
               <button className="book-btn" onClick={() => setShowPopup(true)}>Book Appointment</button>
             </div>
           </div>

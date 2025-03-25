@@ -142,7 +142,7 @@ const ManagePatient = () => {
             {patients.map((patient) => (
               <tr key={patient.id}>
                 <td>{patient.name}</td>
-                <td>{patient.birthdate}</td>
+                <td>{new Date(patient.birthdate).toLocaleDateString()}</td>
                 <td>{patient.mobileno}</td>
                 <td>{patient.address}</td>
                 <td>{patient.email}</td>
