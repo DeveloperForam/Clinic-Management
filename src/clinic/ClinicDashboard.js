@@ -21,15 +21,15 @@ const ClinicDashboard = () => {
                 <div className="dashboard-stats">
                     <div className="stat-card schedule">
                         <h3>Today's Schedule</h3>
-                        <p>5 Scheduled Appointments</p>
+                        <p>1 Schedule</p>
                     </div>
                     <div className="stat-card appointments">
                         <h3>Today's Appointments</h3>
-                        <p>3 Completed</p>
+                        <p>2 Appointments</p>
                     </div>
                     <div className="stat-card patients">
                         <h3>Number of Patients</h3>
-                        <p>20 Total</p>
+                        <p>8 Patients</p>
                     </div>
                 </div>
             </div>

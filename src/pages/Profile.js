@@ -21,9 +21,10 @@ const Profile = () => {
       <h2 className="profile-title">My Profile</h2>
       {user ? (
         <div className="profile-card">
-          <p><strong>Name:</strong> {user.name}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Role:</strong> {user.role}</p>
+          <p><strong>Name: Nikita</strong> {user.name}</p>
+          <p><strong>Email: nikita@gmail.com</strong> {user.email}</p>
+          <p><strong>Mobile No.: 1231231230</strong> {user.mobile}</p>
+          {/* <p><strong>Role:</strong> {user.role}</p> */}
           <button className="btn" onClick={() => navigate(-1)}>Back</button>
         </div>
       ) : (

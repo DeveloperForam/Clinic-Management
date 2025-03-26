@@ -2,141 +2,73 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/viewAppointments.css";
 
-const ViewAppointments = () => {
+const ViewAppointment = () => {
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [notification, setNotification] = useState("");
-  const [expandedDoctors, setExpandedDoctors] = useState({});
+
+  // For filtering, you can match by doctor name or ID (depending on your backend).
+  // Example: const doctorName = "Dr. Smith"; 
+  // Then filter below using appt.doctor_name === doctorName if needed.
+  const doctorId = "1"; // If your backend still uses doctorId, adapt accordingly
 
   useEffect(() => {
-    const storedAppointments = JSON.parse(localStorage.getItem("appointments")) || [];
-    const currentTime = new Date();
-    const upcomingAppointments = [];
-    const pastAppointments = [];
-
-    storedAppointments.forEach((appt) => {
-      const appointmentTime = new Date(`${appt.date} ${appt.time}`);
-      if (appointmentTime >= currentTime) {
-        upcomingAppointments.push(appt);
-      } else {
-        pastAppointments.push(appt);
-      }
-    });
-
-    setAppointments(upcomingAppointments);
-    setHistory(pastAppointments);
-    localStorage.setItem("appointmentHistory", JSON.stringify(pastAppointments));
-  }, []);
-
-  useEffect(() => {
-    const checkUpcomingAppointments = () => {
-      const currentTime = new Date();
-      appointments.forEach((appt) => {
-        const appointmentTime = new Date(`${appt.date} ${appt.time}`);
-        const diff = (appointmentTime - currentTime) / (1000 * 60);
-        if (diff > 0 && diff <= 5) {
-          setNotification(`Reminder: Your appointment with Dr. ${appt.doctorName} is in ${Math.ceil(diff)} minutes!`);
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/appointments/list");
+        if (!response.ok) {
+          throw new Error("Failed to fetch appointments");
         }
-      });
+        const data = await response.json();
+
+        // If your backend still has a doctorId, you can filter like this:
+        // const doctorAppointments = data.filter((appt) => appt.doctorId === doctorId);
+        // Otherwise, remove or adapt the filtering if you only have doctor_name
+        setAppointments(data);
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
+      }
     };
 
-    const interval = setInterval(checkUpcomingAppointments, 60000);
-    return () => clearInterval(interval);
-  }, [appointments]);
-
-  const groupedAppointments = appointments.reduce((acc, appt) => {
-    if (!acc[appt.doctorName]) {
-      acc[appt.doctorName] = [];
-    }
-    acc[appt.doctorName].push(appt);
-    return acc;
-  }, {});
-
-  const groupedHistory = history.reduce((acc, appt) => {
-    if (!acc[appt.doctorName]) {
-      acc[appt.doctorName] = [];
-    }
-    acc[appt.doctorName].push(appt);
-    return acc;
-  }, {});
-
-  const toggleDoctor = (doctorName) => {
-    setExpandedDoctors((prev) => ({
-      ...prev,
-      [doctorName]: !prev[doctorName],
-    }));
-  };
+    fetchAppointments();
+  }, []);
 
   return (
     <div className="appointments-container fade-in">
-      <h2>Your Appointments</h2>
-      {notification && <div className="notification-bar">{notification}</div>}
-
-      {Object.keys(groupedAppointments).length === 0 ? (
-        <p>No upcoming appointments.</p>
+      <h2>Your Scheduled Appointments</h2>
+      {appointments.length === 0 ? (
+        <p>No appointments found.</p>
       ) : (
-        Object.keys(groupedAppointments).map((doctorName) => (
-          <div key={doctorName} className="doctor-section">
-            <h3 onClick={() => toggleDoctor(doctorName)}>
-              Dr. {doctorName} <span>{expandedDoctors[doctorName] ? "▲" : "▼"}</span>
-            </h3>
-            {expandedDoctors[doctorName] && (
-              <table className="appointments-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {groupedAppointments[doctorName].map((appt, index) => (
-                    <tr key={index}>
-                      <td>{appt.date}</td>
-                      <td>{appt.time}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-        ))
+        <table className="appointments-table">
+          <thead>
+            <tr>
+              <th>Appointment Date</th>
+              <th>Status</th>
+              <th>Patient Name</th>
+              <th>Doctor Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {appointments.map((appt, index) => (
+              <tr key={index}>
+                <td>{new Date(appt.appointment_date).toLocaleDateString()}</td>
+                <td>{appt.status}</td>
+                <td>{appt.patient_name}</td>
+                <td>{appt.doctor_name}</td>
+                <td>
+                  <button className="btn edit">Edit</button>
+                  <button className="btn delete">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
-
-      <h2>Appointment History</h2>
-      {Object.keys(groupedHistory).length === 0 ? (
-        <p>No past appointments.</p>
-      ) : (
-        Object.keys(groupedHistory).map((doctorName) => (
-          <div key={doctorName} className="doctor-section">
-            <h3 onClick={() => toggleDoctor(doctorName)}>
-              Dr. {doctorName} <span>{expandedDoctors[doctorName] ? "▲" : "▼"}</span>
-            </h3>
-            {expandedDoctors[doctorName] && (
-              <table className="appointments-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {groupedHistory[doctorName].map((appt, index) => (
-                    <tr key={index}>
-                      <td>{appt.date}</td>
-                      <td>{appt.time}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-        ))
-      )}
-
-      <button className="btn" onClick={() => navigate("/patient/home")}>Back to Home</button>
+      <button className="btn" onClick={() => navigate("/doctor/dashboard")}>
+        Back to Dashboard
+      </button>
     </div>
   );
 };
 
-export default ViewAppointments;
+export default ViewAppointment;

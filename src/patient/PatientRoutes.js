@@ -11,6 +11,7 @@ import Profile from "../pages/Profile";
 import ViewAppointments from "./ViewAppointments";
 import Chatbot from "./Chatbot";
 import Login from "./Login";
+import BookAppointment from "./BookAppointment";
 import Register from "./Register";
 
 const PatientRoutes = () => {
@@ -49,6 +50,7 @@ const PatientRoutes = () => {
             <Route path="home" element={<Home />} />
             <Route path="clinics" element={<Clinic />} />
             <Route path="doctors/:id" element={<DoctorDetails />} />
+            <Route path="patient/book-appointment" element={<BookAppointment/>} />
             <Route path="view-appointment" element={<ViewAppointments />} />
             <Route path="chatbot" element={<Chatbot />} />
             <Route path="about" element={<About />} />

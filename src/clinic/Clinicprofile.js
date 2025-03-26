@@ -3,8 +3,8 @@ import "./clinicprofile.css"; // CSS for styling
 
 const Clinicprofile = () => {
     const [clinicDetails, setClinicDetails] = useState({
-        email: "clinic@example.com", // Dummy email
-        password: "clinic123" // Dummy password
+        email: "heartline@gmail.com", // Dummy email
+        password: "******" // Dummy password
     });
 
     useEffect(() => {
@@ -21,6 +21,8 @@ const Clinicprofile = () => {
         <div className="clinic-profile-container">
             <h2 className="profile-title">Clinic Profile</h2>
             <div className="profile-box">
+                <p> <strong>Clinic Name: Heart Line</strong></p>
+                <p><strong>Reference Id: 7383</strong></p>
                 <p><strong>Email:</strong> {clinicDetails.email}</p>
                 <p><strong>Password:</strong> {clinicDetails.password}</p>
             </div>

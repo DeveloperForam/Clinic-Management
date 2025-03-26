@@ -1,79 +1,51 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/auth.css";
 
 const Register = () => {
-  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
-    // 🔹 Input validation: Ensure fields are not empty
-    if (!name.trim() || !email.trim() || !password.trim()) {
-      setMessage("All fields are required.");
-      return;
+    try {
+      const response = await fetch("http://localhost:5000/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+
+      alert(data.message);
+
+      if (data.success) {
+        setTimeout(() => navigate("/patient/login"), 500); // ✅ Prevents instant re-renders
+      }
+    } catch (error) {
+      console.error("Register error:", error);
+      alert(error.message || "Something went wrong!");
     }
-
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const userExists = users.some((u) => u.email === email);
-
-    if (userExists) {
-      setMessage("User already exists. Please login.");
-      return;
-    }
-
-    const newUser = { name, email, password, role: "Patient" };
-    localStorage.setItem("users", JSON.stringify([...users, newUser]));
-
-    setMessage("Registration successful! Redirecting...");
-    
-    setTimeout(() => {
-      navigate("/patient/login");
-    }, 1000);
   };
 
   return (
-    <div className="auth-container fade-in">
-      <h2 className="auth-title">Register</h2>
-      <form className="auth-form" onSubmit={handleRegister}>
-        <input 
-          type="text" 
-          placeholder="Full Name" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)} 
-          required 
-        />
-        <input 
-          type="email" 
-          placeholder="Email Address" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          required 
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          required 
-        />
-        <button type="submit" className="btn">Register</button>
+    <div className="auth-container">
+      <h2>Patient Registration</h2>
+      <form onSubmit={handleRegister} className="auth-form">
+        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <button type="submit">Register</button>
       </form>
-      {message && <p className="message">{message}</p>}
-      
-      {/* 🔹 Improved navigation to Login page */}
-      <p className="switch-auth">
+      <p>
         Already have an account?{" "}
-        <span 
-          onClick={() => navigate("/patient/login")}
-          style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}
-        >
-          Login
-        </span>
+        <span className="auth-link" onClick={() => navigate("/patient/login")}>Login here</span>
       </p>
     </div>
   );

@@ -22,8 +22,9 @@ const Profile = () => {
       {user ? (
         <div className="profile-card">
           <p><strong>Admin</strong></p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Role:</strong> {user.role}</p>
+          <p><strong>Email: admin@gmail.com</strong> {user.email}</p>
+          <p><strong>Password: ******</strong></p>
+          {/* <p><strong>Role:</strong> {user.role}</p> */}
           <button className="btn" onClick={() => navigate(-1)}>Back</button>
         </div>
       ) : (
