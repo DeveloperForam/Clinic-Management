@@ -10,6 +10,7 @@ const ManageClinics = () => {
     c_address: "",
     c_email: "",
     c_password: "",
+    reference_id: "", // New field added
   });
   const [showForm, setShowForm] = useState(false);
   const [editingClinicId, setEditingClinicId] = useState(null);
@@ -50,12 +51,13 @@ const ManageClinics = () => {
           address: clinicData.c_address,
           email: clinicData.c_email,
           password: clinicData.c_password,
+          reference_id: clinicData.reference_id, // Added reference_id
         }),
       });
 
       if (response.ok) {
         fetchClinics();
-        setClinicData({ c_name: "", c_mobileno: "", c_address: "", c_email: "", c_password: "" });
+        setClinicData({ c_name: "", c_mobileno: "", c_address: "", c_email: "", c_password: "", reference_id: "" });
         setShowForm(false);
       } else {
         console.error("Error adding clinic");
@@ -78,12 +80,13 @@ const ManageClinics = () => {
           address: clinicData.c_address,
           email: clinicData.c_email,
           password: clinicData.c_password,
+          reference_id: clinicData.reference_id, // Added reference_id
         }),
       });
 
       if (response.ok) {
         fetchClinics();
-        setClinicData({ c_name: "", c_mobileno: "", c_address: "", c_email: "", c_password: "" });
+        setClinicData({ c_name: "", c_mobileno: "", c_address: "", c_email: "", c_password: "", reference_id: "" });
         setShowForm(false);
         setEditingClinicId(null);
       } else {
@@ -129,6 +132,7 @@ const ManageClinics = () => {
             <input type="text" name="c_address" placeholder="Address" value={clinicData.c_address} onChange={handleInputChange} />
             <input type="email" name="c_email" placeholder="Email" value={clinicData.c_email} onChange={handleInputChange} />
             <input type="password" name="c_password" placeholder="Password" value={clinicData.c_password} onChange={handleInputChange} />
+            {/* <input type="text" name="reference_id" placeholder="Reference ID" value={clinicData.reference_id} onChange={handleInputChange} /> New input field */}
             
             {editingClinicId ? (
               <button className="btn edit" onClick={updateClinic}>Update</button>
@@ -146,6 +150,7 @@ const ManageClinics = () => {
               <th>Mobile No</th>
               <th>Address</th>
               <th>Email</th>
+              <th>Reference ID</th> {/* New column */}
               <th>Actions</th>
             </tr>
           </thead>
@@ -156,6 +161,7 @@ const ManageClinics = () => {
                 <td>{clinic.mobile_no}</td>
                 <td>{clinic.address}</td>
                 <td>{clinic.email}</td>
+                <td>{clinic.reference_id}</td> {/* Displaying reference_id */}
                 <td>
                   <button
                     className="btn edit"
@@ -167,6 +173,7 @@ const ManageClinics = () => {
                         c_address: clinic.address,
                         c_email: clinic.email,
                         c_password: "",
+                        reference_id: clinic.reference_id, // Populate reference_id when editing
                       });
                       setShowForm(true);
                     }}

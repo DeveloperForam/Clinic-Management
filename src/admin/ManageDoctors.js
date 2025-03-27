@@ -6,74 +6,48 @@ const ManageDoctors = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingDoctorId, setEditingDoctorId] = useState(null);
   const [doctors, setDoctors] = useState([]);
-  const [errors, setErrors] = useState({});
+  const [clinics, setClinics] = useState([]);
   const [doctorData, setDoctorData] = useState({
-    clinic_id: 3,
+    clinic_id: "",
     doctor_name: "",
     email: "",
     mobile_no: "",
-    specialization: "",
-    experience: "",
     gender: "Male",
-    dob: "",
     address: "",
-    schedule: "",
-    dob: "",
-    address: ""
   });
 
   useEffect(() => {
     fetchDoctors();
+    fetchClinics();
   }, []);
 
   const fetchDoctors = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/doctor/clinic-wise");
       const data = await response.json();
-      console.log("Fetch Data:", data);
-      setDoctors(data.flatMap(clinic => clinic.doctors || []));
+      setDoctors(data);
     } catch (error) {
       console.error("Error fetching doctors:", error);
     }
   };
 
-  const validateForm = () => {
-    let errors = {};
-    if (!doctorData.doctor_name || doctorData.doctor_name.length < 3) {
-      errors.doctor_name = "Doctor name must be at least 3 characters";
-    }
-    if (!doctorData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      errors.email = "Invalid email address";
-    }
-    if (!doctorData.mobile_no.match(/^\d{10}$/)) {
-      errors.mobile_no = "Mobile number must be exactly 10 digits";
-    }
-    if (!doctorData.specialization) {
-      errors.specialization = "Specialization is required";
-    }
-    if (!doctorData.experience || isNaN(doctorData.experience)) {
-      errors.experience = "Experience must be a number";
-    }
-    if (!doctorData.dob) {
-      errors.dob = "Date of Birth is required";
-    }
-    if (!doctorData.address || doctorData.address.length < 5) {
-      errors.address = "Address must be at least 5 characters";
-    }
+  const fetchClinics = async () => {
     try {
-      JSON.parse(doctorData.schedule);
-    } catch {
-      errors.schedule = "Schedule must be a valid ";
+      const response = await fetch("http://localhost:5000/api/clinic");
+      const data = await response.json();
+      setClinics(data);
+    } catch (error) {
+      console.error("Error fetching clinics:", error);
     }
-
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async () => {
-    if (!validateForm()) return;
+    if (!doctorData.clinic_id || !doctorData.doctor_name || !doctorData.email || !doctorData.mobile_no || !doctorData.address) {
+      alert("Please fill in all fields.");
+      return;
+    }
 
-    const url = editingDoctorId 
+    const url = editingDoctorId
       ? `http://localhost:5000/api/doctor/update/${editingDoctorId}`
       : "http://localhost:5000/api/doctor/add";
     const method = editingDoctorId ? "PUT" : "POST";
@@ -87,18 +61,14 @@ const ManageDoctors = () => {
 
       if (!response.ok) throw new Error("Failed to save doctor");
 
+      alert(editingDoctorId ? "Doctor updated successfully" : "Doctor added successfully");
+
       setDoctorData({
-        clinic_id: 3,
+        clinic_id: "",
         doctor_name: "",
         email: "",
         mobile_no: "",
-        specialization: "",
-        experience: "",
         gender: "Male",
-        dob: "",
-        address: "",
-        schedule: "",
-        dob: "",
         address: "",
       });
 
@@ -109,8 +79,22 @@ const ManageDoctors = () => {
     }
   };
 
-  const handleChange = (e) => {
-    setDoctorData({ ...doctorData, [e.target.name]: e.target.value });
+  const handleEdit = (doctor) => {
+    setDoctorData(doctor);
+    setEditingDoctorId(doctor.id);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this doctor?")) {
+      try {
+        await fetch(`http://localhost:5000/api/doctor/delete/${id}`, { method: "DELETE" });
+        alert("Doctor deleted successfully");
+        fetchDoctors();
+      } catch (error) {
+        console.error("Error deleting doctor:", error);
+      }
+    }
   };
 
   return (
@@ -122,81 +106,121 @@ const ManageDoctors = () => {
           Add Doctor
         </button>
 
-        {showForm && (
-          <div className="clinic-form">
-            <input type="text" name="doctor_name" placeholder="Doctor Name" value={doctorData.doctor_name} onChange={handleChange} />
-            {errors.doctor_name && <span className="error">{errors.doctor_name}</span>}
-
-            <input type="email" name="email" placeholder="Email" value={doctorData.email} onChange={handleChange} />
-            {errors.email && <span className="error">{errors.email}</span>}
-
-            <input type="tel" name="mobile_no" placeholder="Contact No." value={doctorData.mobile_no} onChange={handleChange} pattern="\d{10}" />
-            {errors.mobile_no && <span className="error">{errors.mobile_no}</span>}
-
-            <input type="text" name="specialization" placeholder="Specialization" value={doctorData.specialization} onChange={handleChange} />
-            {errors.specialization && <span className="error">{errors.specialization}</span>}
-
-            <label>Gender :</label>
-            <label><input type="radio" name="gender" value="Male" checked={doctorData.gender === "Male"} onChange={handleChange} /> Male</label>
-            <label><input type="radio" name="gender" value="Female" checked={doctorData.gender === "Female"} onChange={handleChange} /> Female</label>
-            <label><input type="radio" name="gender" value="Other" checked={doctorData.gender === "Other"} onChange={handleChange} /> Other</label>
-
-            <input type="date" name="dob" placeholder="Date of Birth" value={doctorData.dob} onChange={handleChange} />
-            {errors.dob && <span className="error">{errors.dob}</span>}
-
-            <input type="text" name="address" placeholder="Address" value={doctorData.address} onChange={handleChange} />
-            {errors.address && <span className="error">{errors.address}</span>}
-
-            <input type="text" name="experience" placeholder="Experience (Years)" value={doctorData.experience} onChange={handleChange} />
-            {errors.experience && <span className="error">{errors.experience}</span>}
-
-            <textarea name="schedule" placeholder='Schedule' value={doctorData.schedule} onChange={handleChange}></textarea>
-            {errors.schedule && <span className="error">{errors.schedule}</span>}
-
-            <input type="date" placeholder='Birthdate' value={doctorData.dob} onChange={handleChange}></input>
-            {errors.dob && <span className="error">{errors.dob}</span>}
-
-            <textarea name="address" placeholder='address' value={doctorData.address} onChange={handleChange}></textarea>
-            {errors.address && <span className="error">{errors.address}</span>}
-
-            <button className="btn add" onClick={handleSubmit}>Submit</button>
-            <button className="btn cancel" onClick={() => setShowForm(false)}>Cancel</button>
-          </div>
-        )}
-
         <table className="data-table">
           <thead>
             <tr>
+              <th>Sr No</th>
+              <th>Clinic Name</th>
               <th>Doctor Name</th>
-              <th>Gender</th>
               <th>Email</th>
               <th>Mobile No.</th>
-              <th>Specialization</th>
-              <th>Experience</th>
-              <th>DOB</th>
+              <th>Gender</th>
               <th>Address</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {doctors.map((doctor) => (
+            {doctors.map((doctor, index) => (
               <tr key={doctor.id}>
+                <td>{index + 1}</td>
+                <td>{doctor.clinic_name}</td>
                 <td>{doctor.doctor_name}</td>
-                <td>{doctor.gender}</td>
                 <td>{doctor.email}</td>
                 <td>{doctor.mobile_no}</td>
-                <td>{doctor.specialization}</td>
-                <td>{doctor.experience}</td>
-                <td>{new Date(doctor.dob).toLocaleDateString()}</td>
+                <td>{doctor.gender}</td>
                 <td>{doctor.address}</td>
                 <td>
-                  <button className="btn edit" onClick={() => { setShowForm(true); setEditingDoctorId(doctor.id); setDoctorData(doctor); }}>Edit</button>
-                  <button className="btn delete" onClick={() => handleDelete(doctor.id)}>Delete</button>                
+                  <button className="btn edit" onClick={() => handleEdit(doctor)}>Edit</button>
+                  <button className="btn delete" onClick={() => handleDelete(doctor.id)}>Delete</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        {showForm && (
+          <div className="card-modal">
+            <div className="card-modal-content">
+              <h3>{editingDoctorId ? "Edit Doctor" : "Add Doctor"}</h3>
+              <form className="doctor-form">
+                <div className="form-group">
+                  <label>Clinic:</label>
+                  <select
+                    value={doctorData.clinic_id}
+                    onChange={(e) => setDoctorData({ ...doctorData, clinic_id: e.target.value })}
+                  >
+                    <option value="">Select Clinic</option>
+                    {clinics.map((clinic) => (
+                      <option key={clinic.id} value={clinic.id}>
+                        {clinic.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Doctor Name:</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Doctor's Name"
+                    value={doctorData.doctor_name}
+                    onChange={(e) => setDoctorData({ ...doctorData, doctor_name: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Email:</label>
+                  <input
+                    type="email"
+                    placeholder="Enter Email"
+                    value={doctorData.email}
+                    onChange={(e) => setDoctorData({ ...doctorData, email: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Mobile No.:</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Mobile Number"
+                    value={doctorData.mobile_no}
+                    onChange={(e) => setDoctorData({ ...doctorData, mobile_no: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Gender:</label>
+                  <select
+                    value={doctorData.gender}
+                    onChange={(e) => setDoctorData({ ...doctorData, gender: e.target.value })}
+                  >
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Address:</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Address"
+                    value={doctorData.address}
+                    onChange={(e) => setDoctorData({ ...doctorData, address: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-actions">
+                  <button type="button" onClick={handleSubmit}>
+                    {editingDoctorId ? "Update" : "Add"}
+                  </button>
+                  <button type="button" className="cancel" onClick={() => setShowForm(false)}>
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

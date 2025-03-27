@@ -11,15 +11,15 @@ const AdminDashboard = () => {
         <div className="dashboard-stats">
           <div className="stat-card clinic">
             <h3>Total Clinics</h3>
-            <p>10</p>
+            <p>8</p>
           </div>
           <div className="stat-card doctor">
             <h3>Total Doctors</h3>
-            <p>25</p>
+            <p>3</p>
           </div>
           <div className="stat-card patient">
             <h3>Total Patients</h3>
-            <p>100</p>
+            <p>10</p>
           </div>
         </div>
       </div>
