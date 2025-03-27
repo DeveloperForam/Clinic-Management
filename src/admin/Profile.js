@@ -18,7 +18,7 @@ const Profile = () => {
         <p><strong>Admin</strong></p>
         <p><strong>Email:</strong> {user.email}</p>
         <p><strong>Password:</strong> ******</p>
-        <button className="btn" onClick={() => navigate(-1)}>Back</button>
+        {/* <button className="btn" onClick={() => navigate(-1)}>Back</button> */}
       </div>
     </div>
   );

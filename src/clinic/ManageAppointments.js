@@ -6,23 +6,14 @@ const ManageAppointments = () => {
   const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
 
-  // For filtering, you can match by doctor name or ID (depending on your backend).
-  // Example: const doctorName = "Dr. Smith"; 
-  // Then filter below using appt.doctor_name === doctorName if needed.
-  const doctorId = "1"; // If your backend still uses doctorId, adapt accordingly
-
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/appointments");
+        const response = await fetch("http://localhost:5000/api/appointments/list");
         if (!response.ok) {
           throw new Error("Failed to fetch appointments");
         }
         const data = await response.json();
-
-        // If your backend still has a doctorId, you can filter like this:
-        // const doctorAppointments = data.filter((appt) => appt.doctorId === doctorId);
-        // Otherwise, remove or adapt the filtering if you only have doctor_name
         setAppointments(data);
       } catch (error) {
         console.error("Error fetching appointments:", error);
@@ -41,6 +32,7 @@ const ManageAppointments = () => {
         <table className="appointments-table">
           <thead>
             <tr>
+              <th>Sr No.</th>
               <th>Appointment Date</th>
               <th>Status</th>
               <th>Patient Name</th>
@@ -51,7 +43,8 @@ const ManageAppointments = () => {
           <tbody>
             {appointments.map((appt, index) => (
               <tr key={index}>
-                <td>{new Date(appt.appointment_date).toLocaleDateString()}</td>
+                <td>{index + 1}</td>
+                <td>{new Date(appt.date).toLocaleDateString()}</td>
                 <td>{appt.status}</td>
                 <td>{appt.patient_name}</td>
                 <td>{appt.doctor_name}</td>
